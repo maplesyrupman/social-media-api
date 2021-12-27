@@ -17,6 +17,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@shelf/jest-mongodb": "^2.1.1",
     "jest": "^27.4.5"
   }
 }
