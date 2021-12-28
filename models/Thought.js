@@ -34,10 +34,15 @@ const ThoughtSchema = new Schema({
         required: 'Thought text cannot be blank',
         validate: {
             validator(tt) {
-                return tt > 0 && tt <= 280
+                return tt.length > 0 && tt.length <= 280
             },
             message: 'Thought must be between 1 and 280 characters'
         }
+    },
+    writtenBy: {
+        type: String,
+        required: 'Written by cannot be blank',
+        trim: true
     },
     createdAt: {
         type: Date,

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const userModel = require('../models/User')
-const userData = {username: 'someguy', email: 'guy@email.com', thoughts: [], friends: []}
+const userData = {username: 'someguy', email: 'guy@email.com'}
 
 describe('User model test', () => {
 
@@ -24,6 +24,7 @@ describe('User model test', () => {
         expect(savedUser._id).toBeDefined()
         expect(savedUser.username).toBe(userData.username)
         expect(savedUser.email).toBe(userData.email)
-        //put more after ensuring this even works 
+        expect(Array.isArray(savedUser.thoughts)).toBe(true)
+        expect(Array.isArray(savedUser.friends)).toBe(true)
     })
 })
