@@ -15,11 +15,43 @@ const users = [
     {username: 'mysteriousguy', email: 'mystery@email.com'}
 ]
 
+const thoughts = [
+    {thoughtText: "here's a thought", writtenBy: "someguy"},
+    {thoughtText: "here's another thought", writtenBy: "someguy"},
+    {thoughtText: "here's one more thought", writtenBy: "someguy"},
+    {thoughtText: "here's 1 thought", writtenBy: "anotherguy"},
+    {thoughtText: "here's 2 thought", writtenBy: "anotherguy"},
+    {thoughtText: "here's 3 thought", writtenBy: "anotherguy"},
+    {thoughtText: "so here's what I'm thining", writtenBy: "coolguy"},
+    {thoughtText: "here's a mysterious thought...", writtenBy: "mysteriousguy"}
+]
+
+const getThoughtIds = thoughts => {
+    const thoughtIds = []
+
+    thoughts.forEach(thought => thoughtIds.push([thought._id.valueOf(), thought.writtenBy]))
+    console.log(thoughtIds)
+    return thoughtIds
+}
+
+const addThoughtsToUsers = (thoughtsOfUsers) => {
+    thoughtsOfUsers.forEach(async (userThought) => {
+        await User.findOneAndUpdate(
+            {username: userThought[1]},
+            {$push: {thoughts: mongoose.Types.ObjectId(userThought[0])}}
+        )
+    })
+}
+
 const seedDb = async () => {
     await User.deleteMany({})
     await User.insertMany(users)
+    await Thought.deleteMany({})
+    await Thought.create(thoughts)
+    .then(getThoughtIds)
+    .then(addThoughtsToUsers)
+    .then(console.log('Seeding complete'))
 }
 
-seedDb().then(() => {
-    mongoose.connection.close()
-})
+seedDb().then(() => setTimeout(() => mongoose.connection.close(), 3000))
+
