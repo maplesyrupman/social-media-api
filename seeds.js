@@ -30,12 +30,11 @@ const getThoughtIds = thoughts => {
     const thoughtIds = []
 
     thoughts.forEach(thought => thoughtIds.push([thought._id.valueOf(), thought.writtenBy]))
-    console.log(thoughtIds)
     return thoughtIds
 }
 
 const addThoughtsToUsers = (thoughtsOfUsers) => {
-    thoughtsOfUsers.forEach(async (userThought) => {
+    thoughtsOfUsers.forEach( async (userThought) => {
         await User.findOneAndUpdate(
             {username: userThought[1]},
             {$push: {thoughts: mongoose.Types.ObjectId(userThought[0])}}
@@ -53,5 +52,11 @@ const seedDb = async () => {
     .then(console.log('Seeding complete'))
 }
 
-seedDb().then(() => setTimeout(() => mongoose.connection.close(), 3000))
+seedDb().then(() => {
+    console.log('tying up loose ends...')
+    setTimeout(() => {
+        mongoose.connection.close()
+        console.log('connection closed')
+    }, 3000)
+})
 
