@@ -14,7 +14,6 @@ module.exports = {
             })
             .then(userData => res.status(200).json(userData))
             .catch(err => {
-                console.log(err,'+++++++++=')
                 res.status(500).json(err)
             })
     },
@@ -58,12 +57,15 @@ module.exports = {
     },
 
     deleteUser({ params: { userId } }, res) {
-        User.findByIdAndDelete(userId)
+        User.findByIdAndDelete(userId, )
             .then(userData => {
                 if (!userData) {
                     res.status(404).json({ message: "No user found with that id" })
                     return
                 }
+                const thoughtIds = userData.thoughts
+                Thought.deleteMany({_id: {$in: thoughtIds}})
+                .then(console.log)
                 res.status(200).json(userData)
             })
             .catch(err => res.status(500).json(err))
