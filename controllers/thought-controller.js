@@ -14,7 +14,13 @@ module.exports = {
                     { $push: { thoughts: _id } },
                     { new: true }
                 )
-                    .then(userData => res.status(200).json(userData))
+                    .then(userData => {
+                        if(!userData) {
+                            res.status(404).json({message: 'no user found with that id'})
+                            return
+                        }
+                        res.status(200).json(userData)
+                    })
                     .catch(err => {
 
                         res.status(500).json(err)
@@ -90,6 +96,10 @@ module.exports = {
             (err, thought) => {
                 if(err) {
                     res.status(500).json(err)
+                    return
+                }
+                if(!thought) {
+                    res.status(404).json({message: 'no thought found with that id'})
                     return
                 }
                 res.status(200).json(thought)
